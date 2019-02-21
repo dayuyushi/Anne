@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		img {
+			width: 200px;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		//	1. 发送ajax
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', './imgs.txt', true)
+		xhr.onreadystatechange = function () {
+			if(xhr.readyState !== 4) {
+				return;
+			}
+
+			if(xhr.status >= 200 && xhr.status<300) {
+				console.log(xhr.responseText);
+				//xhr.responseText是一个字符串，格式为一个数组格式。
+				//我们可以通过JSON.parse()来将其转换为真正的数组对象
+				let imgs = JSON.parse(xhr.responseText);
+				console.log(imgs);
+				for(let i=0; i<imgs.length; i++) {
+					createImg(imgs[i].src)
+				}
+			} else {
+				console.error('发送请求失败');
+			}
+		}
+
+		xhr.send();
+		//	2. 创建img
+		function createImg(src) {
+			let img = document.createElement('img');
+			img.src = src;
+			document.body.appendChild(img);
+		}
+	</script>
+</body>
+</html>
